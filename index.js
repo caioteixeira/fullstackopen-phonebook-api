@@ -3,7 +3,8 @@ const morgan = require('morgan')
 
 const app = express()
 app.use(express.json())
-app.use(morgan('tiny'))
+morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
     {
@@ -49,12 +50,6 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-
 const generateId = () => {
     return Math.floor(Math.random() * 99999)
 }
@@ -92,6 +87,12 @@ app.post('/api/persons', (request, response) => {
 
     response.json(note)
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
