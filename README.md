@@ -1,1 +1,1 @@
-https://serene-ocean-43981.herokuapp.com/api/persons
+https://safe-ridge-68679.herokuapp.com/
